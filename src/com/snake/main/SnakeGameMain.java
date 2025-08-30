@@ -5,7 +5,7 @@ import java.awt.*;
 
 public class SnakeGameMain extends JFrame {
 
-    public SnakeGameMain() {   // 👈 constructor add karo
+    public SnakeGameMain() {   // 👈 created constructor to call local method
         initializeUI();
     }
 
