@@ -5,6 +5,10 @@ import java.awt.*;
 
 public class SnakeGameMain extends JFrame {
 
+    public SnakeGameMain() {   // 👈 constructor add karo
+        initializeUI();
+    }
+
     private void initializeUI(){
         add(new SnakeGameBoard());
         setResizable(false);

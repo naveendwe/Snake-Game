@@ -19,8 +19,8 @@ public class SnakeGameBoard extends JPanel implements ActionListener {
     private final int yPosition[];
 
     private int snakeSize;
-    private int apple_x_size;
-    private int apple_y_size;
+    private int apple_x_pos;
+    private int apple_y_pos;
 
     private boolean right = true;
     private boolean left = false;
@@ -36,6 +36,7 @@ public class SnakeGameBoard extends JPanel implements ActionListener {
     public SnakeGameBoard(){
         this.xPosition = new int[ALL_DOTS];
         this.yPosition = new int[ALL_DOTS];
+        initializeSnakeBoard();
     }
 
     private void initializeSnakeBoard(){
@@ -44,13 +45,16 @@ public class SnakeGameBoard extends JPanel implements ActionListener {
         setFocusable(true);
         setPreferredSize(new Dimension(BOARD_WIDTH,BOARD_HEIGHT));
         loadAllImages();
+        System.out.println("Ball image loaded? " + (ballImg != null));
+        System.out.println("Head image loaded? " + (headImg != null));
+        System.out.println("Apple image loaded? " + (appleImg != null));
         initializeGame();
 
     }
     private void loadAllImages(){
         ImageIcon ballIcon = new ImageIcon("src/resources/dot.png");
         ballImg = ballIcon.getImage();
-        ImageIcon appleIcon = new ImageIcon("src/resources/apple.png");
+        ImageIcon appleIcon = new ImageIcon("src/resources/apple.jpg");
         appleImg = appleIcon.getImage();
         ImageIcon headIcon = new ImageIcon("src/resources/head.png");
         headImg = headIcon.getImage();
@@ -76,7 +80,7 @@ public class SnakeGameBoard extends JPanel implements ActionListener {
 
     private void doDrawing(Graphics g){
         if(gameON){
-            g.drawImage(appleImg, apple_x_size, apple_y_size,this);
+            g.drawImage(appleImg, apple_x_pos, apple_y_pos,this);
             for(int p = 0; p < snakeSize; p++){
                 if(p == 0){
                     g.drawImage(headImg, xPosition[p], yPosition[p],this);
@@ -98,8 +102,10 @@ public class SnakeGameBoard extends JPanel implements ActionListener {
 
     }
     private void checkApple(){
-        if((xPosition[0] == apple_x_size) && (yPosition[0] == apple_y_size)){
-            snakeSize++;
+        if((xPosition[0] == apple_x_pos) && (yPosition[0] == apple_y_pos)){
+            if (snakeSize < ALL_DOTS - 1) {   // 👈 ensure max size not crossed
+                snakeSize++;
+            }
             locateNewApple();
         }
 
@@ -148,12 +154,13 @@ public class SnakeGameBoard extends JPanel implements ActionListener {
     }
     private void locateNewApple(){
         int random = (int) (Math.random() * 29);
-        apple_x_size = ((random * DOT_SIZE));
+        apple_x_pos = ((random * DOT_SIZE));
         random = (int) (Math.random() * 29);
-        apple_y_size = ((random * DOT_SIZE));
+        apple_y_pos = ((random * DOT_SIZE));
 
     }
     private class UserClickAdapter extends KeyAdapter{
+
         @Override
         public void keyPressed(KeyEvent e){
             int key = e.getKeyCode();
